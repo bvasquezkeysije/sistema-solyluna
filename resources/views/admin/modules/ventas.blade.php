@@ -248,8 +248,9 @@
                         ? 'Huésped encontrado en base local.'
                         : 'Datos del huésped cargados desde RENIEC.';
                 } catch (e) {
+                    console.error('Error en búsqueda de DNI:', e);
                     this.guestLookupMessageType = 'error';
-                    this.guestLookupMessage = 'Error de conexión al consultar DNI.';
+                    this.guestLookupMessage = 'Error de conexión al consultar DNI: ' + e.message;
                 } finally {
                     this.guestLookupLoading = false;
                 }

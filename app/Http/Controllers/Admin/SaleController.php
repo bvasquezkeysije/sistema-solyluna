@@ -122,33 +122,44 @@ class SaleController extends Controller
 
         if (strlen($document) === 8) {
             $url = config('services.decolecta.reniec_dni_url', 'https://api.decolecta.com/v1/reniec/dni');
-            $response = Http::timeout(12)->acceptJson()->withToken($token)->get($url, ['numero' => $document]);
+            \Log::info('Buscando DNI: ' . $document . ' en ' . $url);
+            try {
+                $response = Http::timeout(12)->acceptJson()->withToken($token)->get($url, ['numero' => $document]);
+                \Log::info('Response status: ' . $response->status());
+                \Log::info('Response body: ' . $response->body());
 
-            if ($response->failed()) {
-                return response()->json(['message' => 'No se pudo consultar RENIEC.'], 422);
+                if ($response->failed()) {
+                    \Log::error('RENIEC consulta falló: ' . $response->status());
+                    return response()->json(['message' => 'No se pudo consultar RENIEC.'], 422);
+                }
+
+                $data = $response->json();
+                \Log::info('Response JSON: ' . json_encode($data));
+                $fullName = trim(
+                    ($data['full_name'] ?? '')
+                    ?: ($data['nombre_completo'] ?? '')
+                    ?: (($data['nombres'] ?? '') . ' ' . ($data['apellido_paterno'] ?? '') . ' ' . ($data['apellido_materno'] ?? ''))
+                    ?: (($data['first_last_name'] ?? '') . ' ' . ($data['second_last_name'] ?? '') . ' ' . ($data['first_name'] ?? ''))
+                );
+
+                if ($fullName === '') {
+                    \Log::error('No se encontró nombre válido en respuesta');
+                    return response()->json(['message' => 'RENIEC no devolvió nombre válido.'], 422);
+                }
+
+                return response()->json([
+                    'source' => 'reniec',
+                    'document_type' => 'dni',
+                    'dni' => $document,
+                    'full_name' => preg_replace('/\s+/', ' ', $fullName),
+                    'email' => '',
+                    'phone' => '',
+                    'address' => '',
+                ]);
+            } catch (\Exception $e) {
+                \Log::error('Excepción en consulta DNI: ' . $e->getMessage());
+                return response()->json(['message' => 'Error en consulta DNI: ' . $e->getMessage()], 500);
             }
-
-            $data = $response->json();
-            $fullName = trim(
-                ($data['full_name'] ?? '')
-                ?: ($data['nombre_completo'] ?? '')
-                ?: (($data['nombres'] ?? '') . ' ' . ($data['apellido_paterno'] ?? '') . ' ' . ($data['apellido_materno'] ?? ''))
-                ?: (($data['first_last_name'] ?? '') . ' ' . ($data['second_last_name'] ?? '') . ' ' . ($data['first_name'] ?? ''))
-            );
-
-            if ($fullName === '') {
-                return response()->json(['message' => 'RENIEC no devolvió nombre válido.'], 422);
-            }
-
-            return response()->json([
-                'source' => 'reniec',
-                'document_type' => 'dni',
-                'dni' => $document,
-                'full_name' => preg_replace('/\s+/', ' ', $fullName),
-                'email' => '',
-                'phone' => '',
-                'address' => '',
-            ]);
         }
 
         if (strlen($document) === 11) {
