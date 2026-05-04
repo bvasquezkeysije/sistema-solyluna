@@ -115,16 +115,16 @@ class SaleController extends Controller
             ]);
         }
 
-        $token = config('services.decolecta.token');
+        $token = config('services.decolecta.apiperu_token');
         if (!$token) {
-            // Token no requerido para APIs gratuitas
+            return response()->json(['message' => 'Falta configurar APIPERU_TOKEN en .env'], 422);
         }
 
         if (strlen($document) === 8) {
-            $url = config('services.decolecta.reniec_dni_url', 'https://api.dniruc.com/dni/') . $document;
+            $url = config('services.decolecta.reniec_dni_url', 'https://apiperu.dev/api/dni/') . $document;
             \Log::info('Buscando DNI: ' . $document . ' en ' . $url);
             try {
-                $response = Http::timeout(12)->acceptJson()->get($url);
+                $response = Http::timeout(12)->acceptJson()->withToken($token)->get($url);
                 \Log::info('Response status: ' . $response->status());
                 \Log::info('Response body: ' . $response->body());
 
@@ -160,8 +160,8 @@ class SaleController extends Controller
         }
 
         if (strlen($document) === 11) {
-            $url = config('services.decolecta.sunat_ruc_url', 'https://api.dniruc.com/ruc/') . $document;
-            $response = Http::timeout(12)->acceptJson()->get($url);
+            $url = config('services.decolecta.sunat_ruc_url', 'https://apiperu.dev/api/ruc/') . $document;
+            $response = Http::timeout(12)->acceptJson()->withToken($token)->get($url);
 
             if ($response->failed()) {
                 return response()->json(['message' => 'No se pudo consultar SUNAT.'], 422);
