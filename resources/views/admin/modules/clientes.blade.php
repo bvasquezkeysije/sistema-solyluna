@@ -63,8 +63,9 @@
                 }
                 this.loadingLookup = true;
                 try {
-                    const response = await fetch('{{ route('admin.clientes.lookup') }}?document=' + encodeURIComponent(doc), {
+                    const response = await fetch('/admin/clientes/lookup?document=' + encodeURIComponent(doc), {
                         method: 'GET',
+                        credentials: 'same-origin',
                         headers: {
                             'Accept': 'application/json',
                         },

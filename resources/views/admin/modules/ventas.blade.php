@@ -171,8 +171,9 @@
 
                 this.quickLoading = true;
                 try {
-                    const response = await fetch('{{ route('admin.ventas.clients.lookup') }}?document=' + encodeURIComponent(doc), {
+                    const response = await fetch('/admin/ventas/clientes/lookup?document=' + encodeURIComponent(doc), {
                         method: 'GET',
+                        credentials: 'same-origin',
                         headers: {
                             'Accept': 'application/json',
                         },
@@ -216,8 +217,9 @@
                 }
                 this.guestLookupLoading = true;
                 try {
-                    const response = await fetch('{{ route('admin.ventas.clients.lookup') }}?document=' + encodeURIComponent(doc), {
+                    const response = await fetch('/admin/ventas/clientes/lookup?document=' + encodeURIComponent(doc), {
                         method: 'GET',
+                        credentials: 'same-origin',
                         headers: {
                             'Accept': 'application/json',
                         },
