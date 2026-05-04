@@ -27,7 +27,7 @@
     @endif
 
     <div class="text-center mb-6">
-        <img src="{{ asset('images/logo-solyluna.png') }}" alt="Solyluna" class="w-[130px] h-[130px] mx-auto mb-3" />
+        <img src="{{ asset('images/logo-solyluna.png') }}" alt="Solyluna" class="w-[96px] h-[96px] mx-auto mb-3" />
         <h1 class="text-[3.25rem] font-extrabold leading-none tracking-wide">
             <span style="color: #0059b6;">SOL</span><span>&nbsp;&nbsp;</span><span style="color: #e3ad0e;">&</span><span>&nbsp;</span><span style="color: #0059b6;">LUNA</span>
         </h1>
