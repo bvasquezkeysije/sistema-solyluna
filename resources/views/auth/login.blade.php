@@ -29,9 +29,9 @@
     <div class="text-center mb-6">
         <img src="{{ asset('images/logo-solyluna.png') }}" alt="Solyluna" class="w-[135px] h-[135px] mx-auto mb-3" />
         <h1 class="text-[3.25rem] font-extrabold leading-none tracking-wide">
-            <span class="text-blue-900">SOL</span>
-            <span class="text-amber-500">&</span>
-            <span class="text-blue-700">LUNA</span>
+            <span style="color: #0059b6;">SOL</span><span>&nbsp;&nbsp;</span>
+            <span style="color: #e3ad0e;">&</span>
+            <span style="color: #0059b6;">LUNA</span>
         </h1>
         <p class="text-sm text-gray-600 mt-1">Inicia sesión para gestionar el sistema</p>
     </div>
