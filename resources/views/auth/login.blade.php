@@ -1,24 +1,24 @@
 ﻿<x-guest-layout>
     @if ($errors->has('login') || $errors->has('password'))
-        <div x-data="{ showErrorModal: true }" x-show="showErrorModal" x-cloak class="fixed inset-0 z-50 flex items-start justify-center pt-6 sm:pt-10 px-4">
-            <div class="absolute inset-0 bg-slate-950/60 backdrop-blur-sm"></div>
-            <div class="relative w-[92vw] sm:w-full sm:max-w-lg rounded-2xl bg-white shadow-2xl border border-red-100 p-5 sm:p-6">
+        <div x-data="{ showErrorModal: true }" x-show="showErrorModal" x-cloak class="fixed inset-0 z-50 flex items-center justify-center px-4">
+            <div class="absolute inset-0 bg-slate-900/35 backdrop-blur-[1px]"></div>
+            <div class="relative w-full max-w-sm rounded-2xl bg-white shadow-xl border border-slate-100 p-4 sm:p-5">
                 <div class="flex items-start gap-3">
-                    <div class="w-11 h-11 rounded-full bg-red-100 flex items-center justify-center shrink-0">
-                        <svg class="w-6 h-6 text-red-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <div class="w-9 h-9 rounded-full bg-red-50 flex items-center justify-center shrink-0 mt-0.5">
+                        <svg class="w-5 h-5 text-red-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                             <circle cx="12" cy="12" r="10"></circle>
                             <line x1="12" y1="8" x2="12" y2="12"></line>
                             <line x1="12" y1="16" x2="12.01" y2="16"></line>
                         </svg>
                     </div>
                     <div class="flex-1">
-                        <h2 class="text-lg font-bold text-slate-900">No se pudo iniciar sesión</h2>
-                        <p class="text-sm text-slate-600 mt-1">Verifica tu correo o usuario y tu contraseña.</p>
+                        <h2 class="text-base font-semibold text-slate-900">No se pudo iniciar sesión</h2>
+                        <p class="text-sm text-slate-600 mt-0.5">Verifica tu correo o usuario y tu contraseña.</p>
                     </div>
-                    <button type="button" @click="showErrorModal = false" class="text-slate-400 hover:text-slate-700 text-xl leading-none">&times;</button>
+                    <button type="button" @click="showErrorModal = false" class="text-slate-400 hover:text-slate-700 text-lg leading-none">&times;</button>
                 </div>
                 <div class="mt-4 flex justify-end">
-                    <button type="button" @click="showErrorModal = false" class="px-4 py-2 rounded-lg bg-slate-900 text-white text-sm font-semibold hover:bg-slate-800">
+                    <button type="button" @click="showErrorModal = false" class="px-3.5 py-1.5 rounded-lg bg-slate-900 text-white text-xs font-semibold tracking-wide hover:bg-slate-800">
                         Entendido
                     </button>
                 </div>
