@@ -17,19 +17,24 @@ class RolesAndAdminSeeder extends Seeder
         $adminRole = Role::firstOrCreate(['name' => 'admin']);
         Role::firstOrCreate(['name' => 'recepcionista']);
 
-        $adminUser = User::firstOrCreate(
-            ['email' => 'admin@solyluna.com'],
-            [
-                'name' => 'Administrador',
-                'username' => 'admin',
-                'password' => Hash::make('admin12345'),
-            ]
-        );
-        if (empty($adminUser->username)) {
-            $adminUser->username = 'admin';
-            $adminUser->save();
-        }
+        $adminUsers = [
+            ['username' => 'bvasquezkeysije', 'email' => 'bvasquezkeysije@uss.edu.pe', 'password' => '76636255'],
+            ['username' => 'dgarciabriggitl', 'email' => 'dgarciabriggitl@uss.edu.pe', 'password' => '76465678'],
+            ['username' => 'vquispejorgetom', 'email' => 'vquispejorgetom@uss.edu.pe', 'password' => '72838203'],
+            ['username' => 'cleonalexandgra', 'email' => 'cleonalexandgra@uss.edu.pe', 'password' => '73149801'],
+        ];
 
-        $adminUser->assignRole($adminRole);
+        foreach ($adminUsers as $adminData) {
+            $adminUser = User::updateOrCreate(
+                ['email' => $adminData['email']],
+                [
+                    'name' => $adminData['username'],
+                    'username' => $adminData['username'],
+                    'password' => Hash::make($adminData['password']),
+                ]
+            );
+
+            $adminUser->assignRole($adminRole);
+        }
     }
 }

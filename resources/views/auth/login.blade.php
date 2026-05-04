@@ -1,8 +1,8 @@
 ﻿<x-guest-layout>
     @if ($errors->has('login') || $errors->has('password'))
-        <div x-data="{ showErrorModal: true }" x-show="showErrorModal" x-cloak class="fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div x-data="{ showErrorModal: true }" x-show="showErrorModal" x-cloak class="fixed inset-0 z-50 flex items-start justify-center pt-6 sm:pt-10 px-4">
             <div class="absolute inset-0 bg-slate-950/60 backdrop-blur-sm"></div>
-            <div class="relative w-full max-w-md rounded-2xl bg-white shadow-2xl border border-red-100 p-6">
+            <div class="relative w-[92vw] sm:w-full sm:max-w-lg rounded-2xl bg-white shadow-2xl border border-red-100 p-5 sm:p-6">
                 <div class="flex items-start gap-3">
                     <div class="w-11 h-11 rounded-full bg-red-100 flex items-center justify-center shrink-0">
                         <svg class="w-6 h-6 text-red-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -17,7 +17,7 @@
                     </div>
                     <button type="button" @click="showErrorModal = false" class="text-slate-400 hover:text-slate-700 text-xl leading-none">&times;</button>
                 </div>
-                <div class="mt-5 flex justify-end">
+                <div class="mt-4 flex justify-end">
                     <button type="button" @click="showErrorModal = false" class="px-4 py-2 rounded-lg bg-slate-900 text-white text-sm font-semibold hover:bg-slate-800">
                         Entendido
                     </button>
