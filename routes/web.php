@@ -22,7 +22,7 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('ad
     Route::patch('/ventas/tipos-pago/{paymentType}', [SaleController::class, 'updatePaymentType'])->name('ventas.payment-types.update');
     Route::patch('/ventas/tipos-pago/{paymentType}/estado', [SaleController::class, 'togglePaymentType'])->name('ventas.payment-types.toggle-status');
     Route::post('/ventas/clientes', [SaleController::class, 'storeQuickClient'])->name('ventas.clients.store');
-    Route::post('/ventas/clientes/lookup', [SaleController::class, 'lookupClientDocument'])->name('ventas.clients.lookup');
+    Route::get('/ventas/clientes/lookup', [SaleController::class, 'lookupClientDocument'])->name('ventas.clients.lookup');
     Route::get('/productos', [ProductController::class, 'index'])->name('productos');
     Route::post('/productos', [ProductController::class, 'store'])->name('productos.store');
     Route::patch('/productos/{product}', [ProductController::class, 'update'])->name('productos.update');
@@ -43,7 +43,7 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('ad
     Route::post('/clientes', [ClientController::class, 'store'])->name('clientes.store');
     Route::patch('/clientes/{client}', [ClientController::class, 'update'])->name('clientes.update');
     Route::patch('/clientes/{client}/estado', [ClientController::class, 'toggleStatus'])->name('clientes.toggle-status');
-    Route::post('/clientes/lookup', [ClientController::class, 'lookupDocument'])->name('clientes.lookup');
+    Route::get('/clientes/lookup', [ClientController::class, 'lookupDocument'])->name('clientes.lookup');
     Route::get('/usuarios', [UserController::class, 'index'])->name('users.index');
     Route::patch('/usuarios/{user}', [UserController::class, 'updateUser'])->name('users.update');
     Route::patch('/usuarios/{user}/estado', [UserController::class, 'toggleUserStatus'])->name('users.toggle-status');

@@ -171,14 +171,11 @@
 
                 this.quickLoading = true;
                 try {
-                    const response = await fetch('{{ route('admin.ventas.clients.lookup') }}', {
-                        method: 'POST',
+                    const response = await fetch('{{ route('admin.ventas.clients.lookup') }}?document=' + encodeURIComponent(doc), {
+                        method: 'GET',
                         headers: {
-                            'Content-Type': 'application/json',
                             'Accept': 'application/json',
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
                         },
-                        body: JSON.stringify({ document: doc }),
                     });
                     const payload = await response.json();
 
@@ -219,14 +216,11 @@
                 }
                 this.guestLookupLoading = true;
                 try {
-                    const response = await fetch('{{ route('admin.ventas.clients.lookup') }}', {
-                        method: 'POST',
+                    const response = await fetch('{{ route('admin.ventas.clients.lookup') }}?document=' + encodeURIComponent(doc), {
+                        method: 'GET',
                         headers: {
-                            'Content-Type': 'application/json',
                             'Accept': 'application/json',
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
                         },
-                        body: JSON.stringify({ document: doc }),
                     });
                     const payload = await response.json();
                     if (!response.ok) {
