@@ -1,7 +1,7 @@
 ﻿<x-guest-layout>
     <div class="text-center mb-6">
-        <img src="{{ asset('images/logo-solyluna.png') }}" alt="Solyluna" class="w-24 h-24 mx-auto mb-3" />
-        <h1 class="text-4xl font-black tracking-wide">
+        <img src="{{ asset('images/logo-solyluna.png') }}" alt="Solyluna" class="w-[135px] h-[135px] mx-auto mb-3" />
+        <h1 class="text-[3.25rem] font-extrabold leading-none tracking-wide">
             <span class="text-blue-900">SOL</span>
             <span class="text-amber-500">&</span>
             <span class="text-blue-700">LUNA</span>
