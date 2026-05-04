@@ -103,22 +103,25 @@ class ClientController extends Controller
             ]);
         }
 
-        $token = config('services.decolecta.apiperu_token');
+        $token = config('services.decolecta.token');
         if (!$token) {
-            return response()->json(['message' => 'Falta configurar APIPERU_TOKEN en .env'], 422);
+            return response()->json(['message' => 'Falta configurar DECOLECTA_API_KEY en .env'], 422);
         }
 
         if (strlen($document) === 8) {
-            $url = config('services.decolecta.reniec_dni_url', 'https://consulta.apiperu.pe/api/dni/') . $document;
-            $response = Http::timeout(12)->acceptJson()->withToken($token)->get($url);
+            $url = config('services.decolecta.reniec_dni_url', 'https://api.decolecta.com/v1/reniec/dni');
+            $response = Http::timeout(12)->acceptJson()->withToken($token)->get($url, ['numero' => $document]);
             if ($response->failed()) {
                 return response()->json(['message' => 'No se pudo consultar RENIEC.'], 422);
             }
             $data = $response->json();
             $fullName = trim(
-                ($data['nombres'] ?? '') . ' ' . ($data['apellido_paterno'] ?? '') . ' ' . ($data['apellido_materno'] ?? '')
+                ($data['full_name'] ?? '')
+                ?: ($data['nombre_completo'] ?? '')
+                ?: (($data['nombres'] ?? '') . ' ' . ($data['apellido_paterno'] ?? '') . ' ' . ($data['apellido_materno'] ?? ''))
+                ?: (($data['first_last_name'] ?? '') . ' ' . ($data['second_last_name'] ?? '') . ' ' . ($data['first_name'] ?? ''))
             );
-            if ($fullName === '' || $fullName === '  ') {
+            if ($fullName === '') {
                 return response()->json(['message' => 'RENIEC no devolvió nombre válido.'], 422);
             }
             return response()->json([
@@ -131,8 +134,8 @@ class ClientController extends Controller
         }
 
         if (strlen($document) === 11) {
-            $url = config('services.decolecta.sunat_ruc_url', 'https://consulta.apiperu.pe/api/ruc/') . $document;
-            $response = Http::timeout(12)->acceptJson()->withToken($token)->get($url);
+            $url = config('services.decolecta.sunat_ruc_url', 'https://api.decolecta.com/v1/sunat/ruc');
+            $response = Http::timeout(12)->acceptJson()->withToken($token)->get($url, ['numero' => $document]);
             if ($response->failed()) {
                 return response()->json(['message' => 'No se pudo consultar SUNAT.'], 422);
             }

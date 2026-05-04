@@ -115,16 +115,16 @@ class SaleController extends Controller
             ]);
         }
 
-        $token = config('services.decolecta.apiperu_token');
+        $token = config('services.decolecta.token');
         if (!$token) {
-            return response()->json(['message' => 'Falta configurar APIPERU_TOKEN en .env'], 422);
+            return response()->json(['message' => 'Falta configurar DECOLECTA_API_KEY en .env'], 422);
         }
 
         if (strlen($document) === 8) {
-            $url = config('services.decolecta.reniec_dni_url', 'https://consulta.apiperu.pe/api/dni/') . $document;
+            $url = config('services.decolecta.reniec_dni_url', 'https://api.decolecta.com/v1/reniec/dni');
             \Log::info('Buscando DNI: ' . $document . ' en ' . $url);
             try {
-                $response = Http::timeout(12)->acceptJson()->withToken($token)->get($url);
+                $response = Http::timeout(12)->acceptJson()->withToken($token)->get($url, ['numero' => $document]);
                 \Log::info('Response status: ' . $response->status());
                 \Log::info('Response body: ' . $response->body());
 
@@ -136,10 +136,13 @@ class SaleController extends Controller
                 $data = $response->json();
                 \Log::info('Response JSON: ' . json_encode($data));
                 $fullName = trim(
-                    ($data['nombres'] ?? '') . ' ' . ($data['apellido_paterno'] ?? '') . ' ' . ($data['apellido_materno'] ?? '')
+                    ($data['full_name'] ?? '')
+                    ?: ($data['nombre_completo'] ?? '')
+                    ?: (($data['nombres'] ?? '') . ' ' . ($data['apellido_paterno'] ?? '') . ' ' . ($data['apellido_materno'] ?? ''))
+                    ?: (($data['first_last_name'] ?? '') . ' ' . ($data['second_last_name'] ?? '') . ' ' . ($data['first_name'] ?? ''))
                 );
 
-                if ($fullName === '' || $fullName === '  ') {
+                if ($fullName === '') {
                     \Log::error('No se encontró nombre válido en respuesta');
                     return response()->json(['message' => 'RENIEC no devolvió nombre válido.'], 422);
                 }
@@ -160,8 +163,8 @@ class SaleController extends Controller
         }
 
         if (strlen($document) === 11) {
-            $url = config('services.decolecta.sunat_ruc_url', 'https://consulta.apiperu.pe/api/ruc/') . $document;
-            $response = Http::timeout(12)->acceptJson()->withToken($token)->get($url);
+            $url = config('services.decolecta.sunat_ruc_url', 'https://api.decolecta.com/v1/sunat/ruc');
+            $response = Http::timeout(12)->acceptJson()->withToken($token)->get($url, ['numero' => $document]);
 
             if ($response->failed()) {
                 return response()->json(['message' => 'No se pudo consultar SUNAT.'], 422);
