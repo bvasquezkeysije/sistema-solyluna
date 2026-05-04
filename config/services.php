@@ -37,8 +37,9 @@ return [
 
     'decolecta' => [
         'token' => env('DECOLECTA_API_KEY'),
-        'reniec_dni_url' => env('DECOLECTA_RENIEC_DNI_URL', 'https://api.decolecta.com/v1/reniec/dni'),
-        'sunat_ruc_url' => env('DECOLECTA_SUNAT_RUC_URL', 'https://api.decolecta.com/v1/sunat/ruc'),
+        'base_url' => env('DECOLECTA_BASE_URL', 'https://api.decolecta.com'),
+        'reniec_dni_url' => env('DECOLECTA_RENIEC_DNI_URL', env('DECOLECTA_BASE_URL', 'https://api.decolecta.com') . '/v1/reniec/dni'),
+        'sunat_ruc_url' => env('DECOLECTA_SUNAT_RUC_URL', env('DECOLECTA_BASE_URL', 'https://api.decolecta.com') . '/v1/sunat/ruc'),
     ],
 
 ];
