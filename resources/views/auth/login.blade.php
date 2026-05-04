@@ -1,23 +1,25 @@
-<x-guest-layout>
-    <div class="text-center mb-5">
-        <h1 class="text-2xl font-bold text-blue-900">Hotel Solyluna</h1>
-        <p class="text-sm text-gray-600">Inicia sesión para gestionar el sistema</p>
+﻿<x-guest-layout>
+    <div class="text-center mb-6">
+        <img src="{{ asset('images/logo-solyluna.png') }}" alt="Solyluna" class="w-24 h-24 mx-auto mb-3" />
+        <h1 class="text-4xl font-black tracking-wide">
+            <span class="text-blue-900">SOL</span>
+            <span class="text-amber-500">&</span>
+            <span class="text-blue-700">LUNA</span>
+        </h1>
+        <p class="text-sm text-gray-600 mt-1">Inicia sesión para gestionar el sistema</p>
     </div>
 
-    <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
     <form method="POST" action="{{ route('login') }}">
         @csrf
 
-        <!-- Email o Usuario -->
         <div>
             <x-input-label for="login" :value="__('Correo o usuario')" />
             <x-text-input id="login" class="block mt-1 w-full" type="text" name="login" :value="old('login')" required autofocus autocomplete="username" />
             <x-input-error :messages="$errors->get('login')" class="mt-2" />
         </div>
 
-        <!-- Password -->
         <div class="mt-4">
             <x-input-label for="password" :value="__('Contraseña')" />
 
@@ -29,7 +31,6 @@
             <x-input-error :messages="$errors->get('password')" class="mt-2" />
         </div>
 
-        <!-- Remember Me -->
         <div class="block mt-4">
             <label for="remember_me" class="inline-flex items-center">
                 <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="remember">
