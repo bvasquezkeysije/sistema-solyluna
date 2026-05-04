@@ -105,23 +105,20 @@ class ClientController extends Controller
 
         $token = config('services.decolecta.token');
         if (!$token) {
-            return response()->json(['message' => 'Falta configurar DECOLECTA_API_KEY en .env'], 422);
+            // Token no requerido para APIs gratuitas
         }
 
         if (strlen($document) === 8) {
-            $url = config('services.decolecta.reniec_dni_url', 'https://api.decolecta.com/v1/reniec/dni');
-            $response = Http::timeout(12)->acceptJson()->withToken($token)->get($url, ['numero' => $document]);
+            $url = config('services.decolecta.reniec_dni_url', 'https://api.reniec.cloud/dni/') . $document;
+            $response = Http::timeout(12)->acceptJson()->get($url);
             if ($response->failed()) {
                 return response()->json(['message' => 'No se pudo consultar RENIEC.'], 422);
             }
             $data = $response->json();
             $fullName = trim(
-                ($data['full_name'] ?? '')
-                ?: ($data['nombre_completo'] ?? '')
-                ?: (($data['nombres'] ?? '') . ' ' . ($data['apellido_paterno'] ?? '') . ' ' . ($data['apellido_materno'] ?? ''))
-                ?: (($data['first_last_name'] ?? '') . ' ' . ($data['second_last_name'] ?? '') . ' ' . ($data['first_name'] ?? ''))
+                ($data['nombres'] ?? '') . ' ' . ($data['apellido_paterno'] ?? '') . ' ' . ($data['apellido_materno'] ?? '')
             );
-            if ($fullName === '') {
+            if ($fullName === '' || $fullName === '  ') {
                 return response()->json(['message' => 'RENIEC no devolvió nombre válido.'], 422);
             }
             return response()->json([
@@ -134,8 +131,8 @@ class ClientController extends Controller
         }
 
         if (strlen($document) === 11) {
-            $url = config('services.decolecta.sunat_ruc_url', 'https://api.decolecta.com/v1/sunat/ruc');
-            $response = Http::timeout(12)->acceptJson()->withToken($token)->get($url, ['numero' => $document]);
+            $url = config('services.decolecta.sunat_ruc_url', 'https://api.sunat.cloud/ruc/') . $document;
+            $response = Http::timeout(12)->acceptJson()->get($url);
             if ($response->failed()) {
                 return response()->json(['message' => 'No se pudo consultar SUNAT.'], 422);
             }
