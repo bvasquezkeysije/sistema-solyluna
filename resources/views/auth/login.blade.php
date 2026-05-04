@@ -27,9 +27,9 @@
     @endif
 
     <div class="text-center mt-4 mb-6">
-        <img src="{{ asset('images/logo-solyluna.png') }}" alt="Solyluna" class="mx-auto mb-3" style="width: 92px; height: 92px;" />
+        <img src="{{ asset('images/logo-solyluna.png') }}" alt="Solyluna" class="mx-auto mb-3" style="width: 200px; height: 200px;" />
         <h1 class="text-[3.25rem] font-extrabold leading-none tracking-wide">
-            <span style="color: #0059b6;">SOL</span><span>&nbsp;&nbsp;</span><span style="color: #e3ad0e;">&</span><span>&nbsp;</span><span style="color: #0059b6;">LUNA</span>
+            <span style="color: #0059b6;"><span>&nbsp;</span> SOL</span><span>&nbsp;&nbsp;</span><span style="color: #e3ad0e;">&</span><span>&nbsp;</span><span style="color: #0059b6;">LUNA</span>
         </h1>
         <p class="text-sm text-gray-600 mt-1">Inicia sesión para gestionar el sistema</p>
     </div>

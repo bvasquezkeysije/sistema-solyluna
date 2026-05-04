@@ -11,7 +11,7 @@
     <body class="font-sans antialiased bg-gray-100">
         <div x-data="{ sidebarOpen: true, userMenuOpen: false }" class="min-h-screen flex">
             <aside
-                class="bg-blue-900 text-white transition-all duration-200"
+                class="bg-blue-900 text-white transition-all duration-200 flex flex-col min-h-screen"
                 :class="sidebarOpen ? 'w-64' : 'w-20'"
             >
                 <div class="pt-4 px-3 flex" :class="sidebarOpen ? 'justify-end' : 'justify-center'">
@@ -36,36 +36,87 @@
 
                 <nav class="p-3 space-y-2">
                     <a href="{{ route('admin.dashboard') }}" class="block px-3 py-2 rounded {{ request()->routeIs('admin.dashboard') ? 'bg-amber-400 text-blue-950 font-semibold' : 'hover:bg-blue-800' }}">
-                        <span x-show="sidebarOpen">Dashboard</span>
-                        <span x-show="!sidebarOpen">D</span>
+                        <span class="inline-flex items-center gap-2" :class="sidebarOpen ? '' : 'justify-center w-full'">
+                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M3 13h8V3H3v10zM13 21h8v-8h-8v8zM13 3v6h8V3h-8zM3 21h8v-6H3v6z"/>
+                            </svg>
+                            <span x-show="sidebarOpen">Dashboard</span>
+                        </span>
                     </a>
                     <a href="{{ route('admin.ventas') }}" class="block px-3 py-2 rounded {{ request()->routeIs('admin.ventas') ? 'bg-amber-400 text-blue-950 font-semibold' : 'hover:bg-blue-800' }}">
-                        <span x-show="sidebarOpen">Ventas</span>
-                        <span x-show="!sidebarOpen">V</span>
+                        <span class="inline-flex items-center gap-2" :class="sidebarOpen ? '' : 'justify-center w-full'">
+                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M3 17l6-6 4 4 8-8"/>
+                                <path d="M14 7h7v7"/>
+                            </svg>
+                            <span x-show="sidebarOpen">Ventas</span>
+                        </span>
                     </a>
                     <a href="{{ route('admin.productos') }}" class="block px-3 py-2 rounded {{ request()->routeIs('admin.productos') ? 'bg-amber-400 text-blue-950 font-semibold' : 'hover:bg-blue-800' }}">
-                        <span x-show="sidebarOpen">Productos</span>
-                        <span x-show="!sidebarOpen">P</span>
+                        <span class="inline-flex items-center gap-2" :class="sidebarOpen ? '' : 'justify-center w-full'">
+                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M3 7l9-4 9 4-9 4-9-4z"/>
+                                <path d="M3 7v10l9 4 9-4V7"/>
+                            </svg>
+                            <span x-show="sidebarOpen">Productos</span>
+                        </span>
                     </a>
                     <a href="{{ route('admin.habitaciones') }}" class="block px-3 py-2 rounded {{ request()->routeIs('admin.habitaciones') ? 'bg-amber-400 text-blue-950 font-semibold' : 'hover:bg-blue-800' }}">
-                        <span x-show="sidebarOpen">Habitaciones</span>
-                        <span x-show="!sidebarOpen">H</span>
+                        <span class="inline-flex items-center gap-2" :class="sidebarOpen ? '' : 'justify-center w-full'">
+                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M3 11h18v8H3z"/>
+                                <path d="M7 11V7h4v4M13 11V6h4v5"/>
+                            </svg>
+                            <span x-show="sidebarOpen">Habitaciones</span>
+                        </span>
+                    </a>
+                    <a href="{{ route('admin.huespedes') }}" class="block px-3 py-2 rounded {{ request()->routeIs('admin.huespedes*') ? 'bg-amber-400 text-blue-950 font-semibold' : 'hover:bg-blue-800' }}">
+                        <span class="inline-flex items-center gap-2" :class="sidebarOpen ? '' : 'justify-center w-full'">
+                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 6.253v13"/>
+                                <path d="M12 6.253C10.832 5.477 9.246 5 7.5 5 4.462 5 2 6.343 2 8v11c0-1.657 2.462-3 5.5-3 1.746 0 3.332.477 4.5 1.253"/>
+                                <path d="M12 6.253C13.168 5.477 14.754 5 16.5 5c3.038 0 5.5 1.343 5.5 3v11c0-1.657-2.462-3-5.5-3-1.746 0-3.332.477-4.5 1.253"/>
+                            </svg>
+                            <span x-show="sidebarOpen">Libro de huéspedes</span>
+                        </span>
                     </a>
                     <a href="{{ route('admin.clientes') }}" class="block px-3 py-2 rounded {{ request()->routeIs('admin.clientes') ? 'bg-amber-400 text-blue-950 font-semibold' : 'hover:bg-blue-800' }}">
-                        <span x-show="sidebarOpen">Clientes</span>
-                        <span x-show="!sidebarOpen">C</span>
+                        <span class="inline-flex items-center gap-2" :class="sidebarOpen ? '' : 'justify-center w-full'">
+                            <img src="{{ asset('images/clienetes.svg') }}" alt="Clientes" class="w-5 h-5 object-contain">
+                            <span x-show="sidebarOpen">Clientes</span>
+                        </span>
                     </a>
                     <a href="{{ route('admin.users.index') }}" class="block px-3 py-2 rounded {{ request()->routeIs('admin.users.*') ? 'bg-amber-400 text-blue-950 font-semibold' : 'hover:bg-blue-800' }}">
-                        <span x-show="sidebarOpen">Usuarios</span>
-                        <span x-show="!sidebarOpen">U</span>
+                        <span class="inline-flex items-center gap-2" :class="sidebarOpen ? '' : 'justify-center w-full'">
+                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="8" r="4"/>
+                                <path d="M4 20c0-4.4 3.6-8 8-8s8 3.6 8 8"/>
+                            </svg>
+                            <span x-show="sidebarOpen">Usuarios</span>
+                        </span>
                     </a>
-                    <div class="pt-3 mt-3 border-t border-blue-800/70">
-                        <a href="{{ route('admin.configuracion') }}" class="block px-3 py-2 rounded {{ request()->routeIs('admin.configuracion') ? 'bg-amber-400 text-blue-950 font-semibold' : 'hover:bg-blue-800' }}">
-                            <span x-show="sidebarOpen">Configuración</span>
-                            <span x-show="!sidebarOpen">⚙</span>
-                        </a>
-                    </div>
+                    <a href="{{ route('admin.reportes') }}" class="block px-3 py-2 rounded {{ request()->routeIs('admin.reportes*') ? 'bg-amber-400 text-blue-950 font-semibold' : 'hover:bg-blue-800' }}">
+                        <span class="inline-flex items-center gap-2" :class="sidebarOpen ? '' : 'justify-center w-full'">
+                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M3 3v18h18"/>
+                                <path d="M7 14l3-3 3 2 4-5"/>
+                            </svg>
+                            <span x-show="sidebarOpen">Reportes</span>
+                        </span>
+                    </a>
                 </nav>
+
+                <div class="mt-auto p-3 border-t border-blue-800/70">
+                    <a href="{{ route('admin.configuracion') }}" class="block px-3 py-2 rounded {{ request()->routeIs('admin.configuracion') ? 'bg-amber-400 text-blue-950 font-semibold' : 'hover:bg-blue-800' }}">
+                        <span class="inline-flex items-center gap-2" :class="sidebarOpen ? '' : 'justify-center w-full'">
+                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="3"/>
+                                <path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06A1.7 1.7 0 0 0 15 19.4a1.7 1.7 0 0 0-1 .27 1.7 1.7 0 0 0-.8 1.46V21a2 2 0 0 1-4 0v-.09a1.7 1.7 0 0 0-.8-1.46 1.7 1.7 0 0 0-1-.27 1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-.27-1 1.7 1.7 0 0 0-1.46-.8H2.8a2 2 0 0 1 0-4h.09a1.7 1.7 0 0 0 1.46-.8 1.7 1.7 0 0 0 .27-1 1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1-.27 1.7 1.7 0 0 0 .8-1.46V2.8a2 2 0 0 1 4 0v.09a1.7 1.7 0 0 0 .8 1.46 1.7 1.7 0 0 0 1 .27 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.7 1.7 0 0 0 19.4 9a1.7 1.7 0 0 0 .27 1 1.7 1.7 0 0 0 1.46.8h.09a2 2 0 0 1 0 4h-.09a1.7 1.7 0 0 0-1.46.8 1.7 1.7 0 0 0-.27 1z"/>
+                            </svg>
+                            <span x-show="sidebarOpen">Configuración</span>
+                        </span>
+                    </a>
+                </div>
             </aside>
 
             <div class="flex-1 flex flex-col">
@@ -103,7 +154,7 @@
                     </div>
                 </header>
 
-                <main class="p-6">
+                <main class="p-6 h-[calc(100vh-4rem)] overflow-y-auto">
                     {{ $slot }}
                 </main>
             </div>

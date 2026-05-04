@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
 class RolesAndAdminSeeder extends Seeder
@@ -14,8 +15,46 @@ class RolesAndAdminSeeder extends Seeder
      */
     public function run(): void
     {
-        $adminRole = Role::firstOrCreate(['name' => 'admin']);
-        Role::firstOrCreate(['name' => 'recepcionista']);
+        $adminRole = Role::updateOrCreate(['name' => 'admin'], ['is_active' => true]);
+        $recepcionistaRole = Role::updateOrCreate(['name' => 'recepcionista'], ['is_active' => true]);
+
+        $permissions = [
+            'dashboard.view',
+            'users.view',
+            'users.create',
+            'users.edit',
+            'users.deactivate',
+            'roles.manage',
+            'clients.view',
+            'clients.create',
+            'clients.edit',
+            'products.view',
+            'products.create',
+            'products.edit',
+            'rooms.view',
+            'rooms.create',
+            'rooms.edit',
+            'floors.manage',
+            'sales.view',
+            'sales.create',
+            'sales.edit',
+            'settings.view',
+        ];
+
+        foreach ($permissions as $permission) {
+            Permission::firstOrCreate(['name' => $permission]);
+        }
+
+        $adminRole->syncPermissions($permissions);
+        $recepcionistaRole->syncPermissions([
+            'dashboard.view',
+            'clients.view',
+            'clients.create',
+            'products.view',
+            'rooms.view',
+            'sales.view',
+            'sales.create',
+        ]);
 
         $adminUsers = [
             ['username' => 'bvasquezkeysije', 'email' => 'bvasquezkeysije@uss.edu.pe', 'password' => '76636255'],
