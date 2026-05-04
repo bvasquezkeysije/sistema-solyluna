@@ -1,4 +1,31 @@
 ﻿<x-guest-layout>
+    @if ($errors->has('login') || $errors->has('password'))
+        <div x-data="{ showErrorModal: true }" x-show="showErrorModal" x-cloak class="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <div class="absolute inset-0 bg-slate-950/60 backdrop-blur-sm"></div>
+            <div class="relative w-full max-w-md rounded-2xl bg-white shadow-2xl border border-red-100 p-6">
+                <div class="flex items-start gap-3">
+                    <div class="w-11 h-11 rounded-full bg-red-100 flex items-center justify-center shrink-0">
+                        <svg class="w-6 h-6 text-red-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="8" x2="12" y2="12"></line>
+                            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                        </svg>
+                    </div>
+                    <div class="flex-1">
+                        <h2 class="text-lg font-bold text-slate-900">No se pudo iniciar sesión</h2>
+                        <p class="text-sm text-slate-600 mt-1">Verifica tu correo o usuario y tu contraseña.</p>
+                    </div>
+                    <button type="button" @click="showErrorModal = false" class="text-slate-400 hover:text-slate-700 text-xl leading-none">&times;</button>
+                </div>
+                <div class="mt-5 flex justify-end">
+                    <button type="button" @click="showErrorModal = false" class="px-4 py-2 rounded-lg bg-slate-900 text-white text-sm font-semibold hover:bg-slate-800">
+                        Entendido
+                    </button>
+                </div>
+            </div>
+        </div>
+    @endif
+
     <div class="text-center mb-6">
         <img src="{{ asset('images/logo-solyluna.png') }}" alt="Solyluna" class="w-[135px] h-[135px] mx-auto mb-3" />
         <h1 class="text-[3.25rem] font-extrabold leading-none tracking-wide">
@@ -17,7 +44,6 @@
         <div>
             <x-input-label for="login" :value="__('Correo o usuario')" />
             <x-text-input id="login" class="block mt-1 w-full" type="text" name="login" :value="old('login')" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('login')" class="mt-2" />
         </div>
 
         <div class="mt-4">
@@ -27,8 +53,6 @@
                             type="password"
                             name="password"
                             required autocomplete="current-password" />
-
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
         </div>
 
         <div class="block mt-4">
