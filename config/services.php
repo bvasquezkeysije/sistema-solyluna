@@ -38,8 +38,8 @@ return [
     'decolecta' => [
         'token' => env('DECOLECTA_API_KEY'),
         'base_url' => env('DECOLECTA_BASE_URL', 'https://api.decolecta.com'),
-        'reniec_dni_url' => env('RENIEC_DNI_URL', 'https://api.reniec.cloud/dni/'),
-        'sunat_ruc_url' => env('SUNAT_RUC_URL', 'https://api.sunat.cloud/ruc/'),
+        'reniec_dni_url' => env('RENIEC_DNI_URL', 'https://dni.buq.io/api/dni/'),
+        'sunat_ruc_url' => env('SUNAT_RUC_URL', 'https://ruc.buq.io/api/ruc/'),
     ],
 
 ];

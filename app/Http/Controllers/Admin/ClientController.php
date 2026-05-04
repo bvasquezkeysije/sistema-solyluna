@@ -109,7 +109,7 @@ class ClientController extends Controller
         }
 
         if (strlen($document) === 8) {
-            $url = config('services.decolecta.reniec_dni_url', 'https://api.reniec.cloud/dni/') . $document;
+            $url = config('services.decolecta.reniec_dni_url', 'https://dni.buq.io/api/dni/') . $document;
             $response = Http::timeout(12)->acceptJson()->get($url);
             if ($response->failed()) {
                 return response()->json(['message' => 'No se pudo consultar RENIEC.'], 422);
@@ -131,7 +131,7 @@ class ClientController extends Controller
         }
 
         if (strlen($document) === 11) {
-            $url = config('services.decolecta.sunat_ruc_url', 'https://api.sunat.cloud/ruc/') . $document;
+            $url = config('services.decolecta.sunat_ruc_url', 'https://ruc.buq.io/api/ruc/') . $document;
             $response = Http::timeout(12)->acceptJson()->get($url);
             if ($response->failed()) {
                 return response()->json(['message' => 'No se pudo consultar SUNAT.'], 422);
