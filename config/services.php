@@ -38,8 +38,8 @@ return [
     'decolecta' => [
         'token' => env('DECOLECTA_API_KEY'),
         'base_url' => env('DECOLECTA_BASE_URL', 'https://api.decolecta.com'),
-        'reniec_dni_url' => env('RENIEC_DNI_URL', 'https://apiperu.dev/api/dni/'),
-        'sunat_ruc_url' => env('SUNAT_RUC_URL', 'https://apiperu.dev/api/ruc/'),
+        'reniec_dni_url' => env('RENIEC_DNI_URL', 'https://consulta.apiperu.pe/api/dni/'),
+        'sunat_ruc_url' => env('SUNAT_RUC_URL', 'https://consulta.apiperu.pe/api/ruc/'),
         'apiperu_token' => env('APIPERU_TOKEN'),
     ],
 

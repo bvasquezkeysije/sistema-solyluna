@@ -121,7 +121,7 @@ class SaleController extends Controller
         }
 
         if (strlen($document) === 8) {
-            $url = config('services.decolecta.reniec_dni_url', 'https://apiperu.dev/api/dni/') . $document;
+            $url = config('services.decolecta.reniec_dni_url', 'https://consulta.apiperu.pe/api/dni/') . $document;
             \Log::info('Buscando DNI: ' . $document . ' en ' . $url);
             try {
                 $response = Http::timeout(12)->acceptJson()->withToken($token)->get($url);
@@ -160,7 +160,7 @@ class SaleController extends Controller
         }
 
         if (strlen($document) === 11) {
-            $url = config('services.decolecta.sunat_ruc_url', 'https://apiperu.dev/api/ruc/') . $document;
+            $url = config('services.decolecta.sunat_ruc_url', 'https://consulta.apiperu.pe/api/ruc/') . $document;
             $response = Http::timeout(12)->acceptJson()->withToken($token)->get($url);
 
             if ($response->failed()) {
