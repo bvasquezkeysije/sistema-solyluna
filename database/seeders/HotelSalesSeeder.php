@@ -12,15 +12,12 @@ use App\Models\Sale;
 use App\Models\SaleItem;
 use App\Models\User;
 use Carbon\Carbon;
-use Faker\Factory as FakerFactory;
 use Illuminate\Database\Seeder;
 
 class HotelSalesSeeder extends Seeder
 {
     public function run(): void
     {
-        $faker = FakerFactory::create('es_PE');
-
         $user = User::query()->orderBy('id')->first();
         $rooms = Room::query()->where('active', true)->get();
         $products = Product::query()->where('active', true)->get();
@@ -59,13 +56,13 @@ class HotelSalesSeeder extends Seeder
             // Base: 52 con habitacion + 28 solo productos (primeras 80).
             // Extra: 40 adicionales (81-120) siempre con habitacion y huesped registrado.
             $withRoom = $i <= 52 || $i > 80;
-            $client = $faker->boolean(25) ? $consumerFinal : $clients->random();
+            $client = $this->chance(25) ? $consumerFinal : $clients->random();
             $paymentType = $paymentTypes->random();
             $createdAt = Carbon::now()
                 ->subDays(random_int(0, 40))
                 ->setTime(random_int(7, 23), random_int(0, 59));
 
-            $isFactura = $client->id !== $consumerFinal->id && $faker->boolean(15);
+            $isFactura = $client->id !== $consumerFinal->id && $this->chance(15);
             $documentType = $isFactura ? 'factura' : 'boleta';
             $series = $isFactura ? 'F001' : 'B001';
 
@@ -89,7 +86,7 @@ class HotelSalesSeeder extends Seeder
 
             if ($withRoom) {
                 $room = $rooms->random();
-                $useDaily = $faker->boolean(35);
+                $useDaily = $this->chance(35);
 
                 if ($useDaily) {
                     $days = random_int(1, 3);
@@ -198,5 +195,10 @@ class HotelSalesSeeder extends Seeder
         }
 
         return trim($first . ' ' . $middle . ' ' . $last1 . ' ' . $last2);
+    }
+
+    private function chance(int $percent): bool
+    {
+        return random_int(1, 100) <= max(0, min(100, $percent));
     }
 }
