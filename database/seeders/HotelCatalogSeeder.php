@@ -11,12 +11,48 @@ class HotelCatalogSeeder extends Seeder
 {
     public function run(): void
     {
-        $floor1 = Floor::updateOrCreate(['number' => 1], ['code' => 'PIS-001', 'name' => 'Primer piso']);
-        $floor2 = Floor::updateOrCreate(['number' => 2], ['code' => 'PIS-002', 'name' => 'Segundo piso']);
+        $floorNames = [
+            1 => 'Primer piso',
+            2 => 'Segundo piso',
+            3 => 'Tercer piso',
+            4 => 'Cuarto piso',
+            5 => 'Quinto piso',
+        ];
 
-        Room::updateOrCreate(['room_number' => '101'], ['code' => 'HAB-101', 'floor_id' => $floor1->id, 'type' => 'Simple', 'hourly_rate' => 25, 'daily_rate' => 120, 'active' => true]);
-        Room::updateOrCreate(['room_number' => '102'], ['code' => 'HAB-102', 'floor_id' => $floor1->id, 'type' => 'Doble', 'hourly_rate' => 35, 'daily_rate' => 160, 'active' => true]);
-        Room::updateOrCreate(['room_number' => '201'], ['code' => 'HAB-201', 'floor_id' => $floor2->id, 'type' => 'Matrimonial', 'hourly_rate' => 45, 'daily_rate' => 220, 'active' => true]);
+        $floorsByNumber = [];
+        foreach ($floorNames as $number => $name) {
+            $floorsByNumber[$number] = Floor::updateOrCreate(
+                ['number' => $number],
+                ['code' => sprintf('PIS-%03d', $number), 'name' => $name]
+            );
+        }
+
+        // 6 habitaciones por piso, variando tipos y excluyendo Suite (TIP-SUIT-D91).
+        $roomTypes = [
+            ['name' => 'Simple', 'hourly' => 25, 'daily' => 120],
+            ['name' => 'Doble', 'hourly' => 35, 'daily' => 160],
+            ['name' => 'Matrimonial', 'hourly' => 45, 'daily' => 220],
+        ];
+
+        foreach ($floorsByNumber as $floorNumber => $floor) {
+            for ($i = 1; $i <= 6; $i++) {
+                $roomNumber = (string) ($floorNumber * 100 + $i);
+                $code = 'HAB-' . $roomNumber;
+                $typeConfig = $roomTypes[($i - 1) % count($roomTypes)];
+
+                Room::updateOrCreate(
+                    ['room_number' => $roomNumber],
+                    [
+                        'code' => $code,
+                        'floor_id' => $floor->id,
+                        'type' => $typeConfig['name'],
+                        'hourly_rate' => $typeConfig['hourly'],
+                        'daily_rate' => $typeConfig['daily'],
+                        'active' => true,
+                    ]
+                );
+            }
+        }
 
         Product::updateOrCreate(['name' => 'Coca Cola'], ['code' => 'PRO-001', 'category' => 'Bebidas', 'price' => 6.00, 'stock' => 100, 'active' => true]);
         Product::updateOrCreate(['name' => 'Papel higienico'], ['code' => 'PRO-002', 'category' => 'Higiene', 'price' => 3.50, 'stock' => 80, 'active' => true]);

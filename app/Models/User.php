@@ -25,6 +25,7 @@ class User extends Authenticatable
         'email',
         'password',
         'is_active',
+        'worker_id',
     ];
 
     /**
@@ -49,5 +50,15 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function worker()
+    {
+        return $this->belongsTo(Worker::class);
+    }
+
+    public function getDisplayNameAttribute(): string
+    {
+        return $this->worker?->full_name ?? $this->name;
     }
 }

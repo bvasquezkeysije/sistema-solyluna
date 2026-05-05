@@ -143,6 +143,57 @@ class RoomController extends Controller
             ->with('open_room_modal', false);
     }
 
+    public function updateRoom(Request $request, Room $room)
+    {
+        $validator = Validator::make($request->all(), [
+            'floor_id' => ['required', 'integer', 'exists:floors,id'],
+            'room_number' => ['required', 'string', 'max:20', 'unique:rooms,room_number,'.$room->id],
+            'type' => ['required', 'string', 'max:50'],
+            'hourly_rate' => ['nullable', 'numeric', 'min:0'],
+            'daily_rate' => ['nullable', 'numeric', 'min:0'],
+            'active' => ['nullable', 'boolean'],
+        ]);
+
+        if ($validator->fails()) {
+            return back()
+                ->withErrors($validator, 'room')
+                ->withInput()
+                ->with('open_room_modal', false)
+                ->with('open_edit_room_modal', true)
+                ->with('edit_room', [
+                    'id' => $room->id,
+                    'floor_id' => $request->input('floor_id', $room->floor_id),
+                    'room_number' => $request->input('room_number', $room->room_number),
+                    'type' => $request->input('type', $room->type),
+                    'hourly_rate' => $request->input('hourly_rate', $room->hourly_rate),
+                    'daily_rate' => $request->input('daily_rate', $room->daily_rate),
+                    'active' => (string) $request->input('active', $room->active ? '1' : '0'),
+                ]);
+        }
+
+        $validated = $validator->validated();
+
+        $room->update([
+            'floor_id' => (int) $validated['floor_id'],
+            'room_number' => $validated['room_number'],
+            'type' => $validated['type'],
+            'hourly_rate' => $validated['hourly_rate'] ?? null,
+            'daily_rate' => $validated['daily_rate'] ?? null,
+            'active' => (bool) ($validated['active'] ?? true),
+        ]);
+
+        return back()->with('room_success', 'Habitación actualizada correctamente.');
+    }
+
+    public function toggleRoomStatus(Room $room)
+    {
+        $room->update([
+            'active' => !$room->active,
+        ]);
+
+        return back()->with('room_success', $room->active ? 'Habitación activada correctamente.' : 'Habitación desactivada correctamente.');
+    }
+
     public function updateFloor(Request $request, Floor $floor)
     {
         $validator = Validator::make($request->all(), [

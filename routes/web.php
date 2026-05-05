@@ -31,6 +31,8 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('ad
     Route::patch('/productos/categorias/{category}', [ProductController::class, 'updateCategory'])->name('productos.categories.update');
     Route::get('/habitaciones', [RoomController::class, 'index'])->name('habitaciones');
     Route::post('/habitaciones', [RoomController::class, 'storeRoom'])->name('habitaciones.store');
+    Route::patch('/habitaciones/{room}', [RoomController::class, 'updateRoom'])->name('habitaciones.update');
+    Route::patch('/habitaciones/{room}/estado', [RoomController::class, 'toggleRoomStatus'])->name('habitaciones.toggle-status');
     Route::post('/habitaciones/pisos', [RoomController::class, 'storeFloor'])->name('habitaciones.floors.store');
     Route::patch('/habitaciones/pisos/{floor}', [RoomController::class, 'updateFloor'])->name('habitaciones.floors.update');
     Route::post('/habitaciones/tipos', [RoomController::class, 'storeType'])->name('habitaciones.types.store');
@@ -47,6 +49,9 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('ad
     Route::get('/usuarios', [UserController::class, 'index'])->name('users.index');
     Route::patch('/usuarios/{user}', [UserController::class, 'updateUser'])->name('users.update');
     Route::patch('/usuarios/{user}/estado', [UserController::class, 'toggleUserStatus'])->name('users.toggle-status');
+    Route::post('/usuarios/trabajadores', [UserController::class, 'storeWorker'])->name('users.workers.store');
+    Route::patch('/usuarios/trabajadores/{worker}', [UserController::class, 'updateWorker'])->name('users.workers.update');
+    Route::patch('/usuarios/trabajadores/{worker}/estado', [UserController::class, 'toggleWorkerStatus'])->name('users.workers.toggle-status');
     Route::post('/usuarios/roles', [UserController::class, 'storeRole'])->name('users.roles.store');
     Route::patch('/usuarios/roles/{role}', [UserController::class, 'updateRole'])->name('users.roles.update');
     Route::patch('/usuarios/roles/{role}/estado', [UserController::class, 'toggleRoleStatus'])->name('users.roles.toggle-status');

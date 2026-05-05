@@ -57,12 +57,16 @@
                     <input type="date" name="to" value="{{ $to->format('Y-m-d') }}" class="w-full rounded-xl border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm">
                 </div>
                 <div class="flex gap-2">
-                    <button type="submit" class="px-5 py-2.5 rounded-xl bg-blue-900 text-white text-sm font-semibold hover:bg-blue-800">Filtrar</button>
-                    <a href="{{ route('admin.reportes') }}" class="px-5 py-2.5 rounded-xl border border-slate-300 text-slate-700 text-sm font-semibold hover:bg-slate-50">Limpiar</a>
+                    <button type="submit" class="inline-flex items-center justify-center px-5 py-2.5 rounded-xl bg-blue-900 text-white text-sm font-semibold hover:bg-blue-800" aria-label="Filtrar" title="Filtrar">
+                        <img src="{{ asset('images/flitro.svg') }}" alt="Filtrar" class="w-4 h-4 brightness-0 invert">
+                    </button>
+                    <a href="{{ route('admin.reportes') }}" class="inline-flex items-center justify-center px-5 py-2.5 rounded-xl border border-slate-300 text-slate-700 text-sm font-semibold hover:bg-slate-50" aria-label="Limpiar" title="Limpiar">
+                        <img src="{{ asset('images/limpiar.svg') }}" alt="Limpiar" class="w-4 h-4">
+                    </a>
                 </div>
                 <div class="md:text-right">
-                    <a href="{{ route('admin.reportes.sales.csv', ['from' => $from->format('Y-m-d'), 'to' => $to->format('Y-m-d')]) }}" class="inline-flex items-center px-5 py-2.5 rounded-xl border border-emerald-200 bg-emerald-50 text-emerald-800 text-sm font-semibold hover:bg-emerald-100">
-                        Descargar Excel (CSV)
+                    <a href="{{ route('admin.reportes.sales.csv', ['from' => $from->format('Y-m-d'), 'to' => $to->format('Y-m-d')]) }}" class="inline-flex items-center justify-center px-5 py-2.5 rounded-xl border border-emerald-200 bg-emerald-50 text-emerald-800 text-sm font-semibold hover:bg-emerald-100" aria-label="Descargar Excel (CSV)" title="Descargar Excel (CSV)">
+                        <img src="{{ asset('images/exel-descragar.svg') }}" alt="Descargar Excel (CSV)" class="w-4 h-4">
                     </a>
                 </div>
             </form>

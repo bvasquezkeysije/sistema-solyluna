@@ -10,10 +10,18 @@
             <form method="GET" action="{{ route('admin.huespedes') }}" class="space-y-4">
                 <div class="flex flex-col gap-3 lg:flex-row lg:items-center">
                     <input type="text" name="q" value="{{ request('q') }}" class="w-full lg:flex-1 rounded-xl border-gray-300 focus:border-blue-500 focus:ring-blue-500" placeholder="Buscar por código, huésped, documento o habitación">
-                    <button type="button" @click="showFilters=!showFilters" class="px-5 py-2.5 rounded-xl border border-slate-300 text-slate-700 text-sm font-semibold hover:bg-slate-50">Filtros</button>
-                    <button type="button" @click="showCreate=true" class="px-5 py-2.5 rounded-xl border border-blue-200 bg-blue-50 text-blue-800 text-sm font-semibold hover:bg-blue-100">Registrar huésped</button>
-                    <a href="{{ route('admin.huespedes.print', request()->query()) }}" target="_blank" class="px-5 py-2.5 rounded-xl border border-emerald-200 bg-emerald-50 text-emerald-800 text-sm font-semibold hover:bg-emerald-100 text-center">Imprimir registro</a>
-                    <button type="submit" class="px-5 py-2.5 rounded-xl bg-blue-900 text-white text-sm font-semibold hover:bg-blue-800">Buscar</button>
+                    <button type="button" @click="showFilters=!showFilters" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-slate-300 text-slate-700 text-sm font-semibold hover:bg-slate-50" aria-label="Filtros" title="Filtros">
+                        <img src="{{ asset('images/flitro.svg') }}" alt="Filtros" class="w-4 h-4">
+                    </button>
+                    <button type="button" @click="showCreate=true" class="inline-flex items-center justify-center px-5 py-2.5 rounded-xl border border-blue-200 bg-blue-50 text-blue-800 text-sm font-semibold hover:bg-blue-100" aria-label="Registrar huésped" title="Registrar huésped">
+                        <img src="{{ asset('images/anadir-huesped.svg') }}" alt="Registrar huésped" class="w-4 h-4">
+                    </button>
+                    <a href="{{ route('admin.huespedes.print', request()->query()) }}" target="_blank" class="inline-flex items-center justify-center px-5 py-2.5 rounded-xl border border-emerald-200 bg-emerald-50 text-emerald-800 text-sm font-semibold hover:bg-emerald-100 text-center" aria-label="Imprimir registro" title="Imprimir registro">
+                        <img src="{{ asset('images/imprimir.svg') }}" alt="Imprimir registro" class="w-4 h-4">
+                    </a>
+                    <button type="submit" class="inline-flex items-center justify-center px-5 py-2.5 rounded-xl bg-blue-900 text-white text-sm font-semibold hover:bg-blue-800" aria-label="Buscar" title="Buscar">
+                        <img src="{{ asset('images/buscar.svg') }}" alt="Buscar" class="w-4 h-4 brightness-0 invert">
+                    </button>
                 </div>
 
                 <div x-show="showFilters" x-transition class="grid grid-cols-1 md:grid-cols-3 gap-3 rounded-xl border border-slate-200 bg-slate-50/60 p-4" style="display:none;">

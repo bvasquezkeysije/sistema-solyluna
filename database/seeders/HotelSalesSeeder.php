@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Client;
+use App\Models\GuestRegister;
 use App\Models\PaymentType;
 use App\Models\Product;
 use App\Models\Room;
@@ -17,241 +18,161 @@ class HotelSalesSeeder extends Seeder
 {
     public function run(): void
     {
-        $clients = [
-            ['code' => 'CLI-0001', 'dni' => '45879632', 'full_name' => 'Juan Carlos Rojas Diaz', 'email' => 'juan.rojas@mail.com', 'phone' => '987654321', 'active' => true],
-            ['code' => 'CLI-0002', 'dni' => '71345682', 'full_name' => 'Maria Fernanda Soto Ruiz', 'email' => 'maria.soto@mail.com', 'phone' => '956321478', 'active' => true],
-            ['code' => 'CLI-0003', 'dni' => '60231459', 'full_name' => 'Luis Alberto Cueva Ramos', 'email' => 'luis.cueva@mail.com', 'phone' => '945632178', 'active' => true],
-            ['code' => 'CLI-0004', 'dni' => '75963124', 'full_name' => 'Rosa Elena Paredes Mena', 'email' => 'rosa.paredes@mail.com', 'phone' => '989741236', 'active' => true],
-        ];
-
-        foreach ($clients as $data) {
-            Client::updateOrCreate(['dni' => $data['dni']], $data);
-        }
-
         $user = User::query()->orderBy('id')->first();
-        if (!$user) {
+        $rooms = Room::query()->where('active', true)->get();
+        $products = Product::query()->where('active', true)->get();
+        $paymentTypes = PaymentType::query()->where('is_active', true)->get();
+
+        if (!$user || $rooms->isEmpty() || $products->isEmpty() || $paymentTypes->isEmpty()) {
             return;
         }
 
-        $client1 = Client::where('dni', '45879632')->first();
-        $client2 = Client::where('dni', '71345682')->first();
-        $client3 = Client::where('dni', '60231459')->first();
-        $client4 = Client::where('dni', '75963124')->first();
+        $consumerFinal = Client::query()->updateOrCreate(
+            ['code' => 'CLI-CFINAL'],
+            [
+                'dni' => '99999999',
+                'full_name' => 'CONSUMIDOR FINAL',
+                'email' => null,
+                'phone' => null,
+                'active' => true,
+            ]
+        );
 
-        $room101 = Room::where('room_number', '101')->first();
-        $room102 = Room::where('room_number', '102')->first();
-        $room201 = Room::where('room_number', '201')->first();
-
-        $cocacola = Product::where('code', 'PRO-001')->first();
-        $papel = Product::where('code', 'PRO-002')->first();
-        $snack = Product::where('code', 'PRO-003')->first();
-
-        $cash = PaymentType::query()->where('name', 'Efectivo')->first();
-        $yape = PaymentType::query()->where('name', 'Yape')->first();
-        $plin = PaymentType::query()->where('name', 'Plin')->first();
-        $transfer = PaymentType::query()->where('name', 'Transferencia')->first();
-
-        if (!$client1 || !$client2 || !$client3 || !$client4 || !$room101 || !$room102 || !$room201 || !$cocacola || !$papel || !$snack || !$cash || !$yape || !$plin || !$transfer) {
+        $clients = Client::query()->where('active', true)->where('id', '!=', $consumerFinal->id)->get();
+        if ($clients->isEmpty()) {
             return;
         }
 
-        $this->seedSaleWithRentalAndProducts(
-            code: 'VTA-0001',
-            correlative: 1,
-            clientId: $client1->id,
-            userId: $user->id,
-            paymentTypeId: $cash->id,
-            roomId: $room101->id,
-            startAt: Carbon::now()->subDays(2)->setTime(9, 0),
-            endAt: Carbon::now()->subDays(2)->setTime(15, 0),
-            rate: 25,
-            productLines: [
-                ['product' => $cocacola, 'quantity' => 2],
-                ['product' => $snack, 'quantity' => 1],
-            ],
-            status: 'paid'
-        );
+        GuestRegister::query()->delete();
+        RoomRental::query()->delete();
+        SaleItem::query()->delete();
+        Sale::query()->delete();
 
-        $this->seedSaleWithRentalAndProducts(
-            code: 'VTA-0002',
-            correlative: 2,
-            clientId: $client2->id,
-            userId: $user->id,
-            paymentTypeId: $yape->id,
-            roomId: $room201->id,
-            startAt: Carbon::now()->subDay()->setTime(22, 0),
-            endAt: Carbon::now()->setTime(8, 0),
-            rate: 45,
-            productLines: [
-                ['product' => $papel, 'quantity' => 1],
-            ],
-            status: 'paid'
-        );
+        $guestFirstNames = ['Luis', 'Jose', 'Carlos', 'Miguel', 'Pedro', 'Jorge', 'Marco', 'Diego', 'Kevin', 'Andres', 'Maria', 'Rosa', 'Lucia', 'Camila', 'Andrea', 'Sofia', 'Paola', 'Valeria', 'Mariana', 'Fiorella'];
+        $guestMiddleNames = ['Alberto', 'Enrique', 'Antonio', 'Javier', 'Manuel', 'David', 'Fernanda', 'Patricia', 'Estefania', 'Lorena'];
+        $guestLastNames = ['Vasquez', 'Garcia', 'Torres', 'Flores', 'Mendoza', 'Castillo', 'Chavez', 'Diaz', 'Sanchez', 'Rodriguez', 'Fernandez', 'Ramos', 'Lopez', 'Vera', 'Huaman', 'Silva', 'Paredes', 'Ruiz', 'Campos', 'Cruz'];
 
-        $this->seedProductOnlySale(
-            code: 'VTA-0003',
-            correlative: 3,
-            clientId: $client3->id,
-            userId: $user->id,
-            paymentTypeId: $transfer->id,
-            lines: [
-                ['product' => $cocacola, 'quantity' => 1],
-                ['product' => $snack, 'quantity' => 3],
-            ],
-            status: 'paid'
-        );
+        for ($i = 1; $i <= 120; $i++) {
+            // Base: 52 con habitacion + 28 solo productos (primeras 80).
+            // Extra: 40 adicionales (81-120) siempre con habitacion y huesped registrado.
+            $withRoom = $i <= 52 || $i > 80;
+            $client = fake()->boolean(25) ? $consumerFinal : $clients->random();
+            $paymentType = $paymentTypes->random();
+            $createdAt = Carbon::now()
+                ->subDays(random_int(0, 40))
+                ->setTime(random_int(7, 23), random_int(0, 59));
 
-        $this->seedSaleWithRentalAndProducts(
-            code: 'VTA-0004',
-            correlative: 4,
-            clientId: $client4->id,
-            userId: $user->id,
-            paymentTypeId: $plin->id,
-            roomId: $room102->id,
-            startAt: Carbon::now()->subHours(8),
-            endAt: Carbon::now()->subHours(2),
-            rate: 35,
-            productLines: [
-                ['product' => $papel, 'quantity' => 1],
-            ],
-            status: 'paid'
-        );
+            $isFactura = $client->id !== $consumerFinal->id && fake()->boolean(15);
+            $documentType = $isFactura ? 'factura' : 'boleta';
+            $series = $isFactura ? 'F001' : 'B001';
 
-        $this->seedProductOnlySale(
-            code: 'VTA-0005',
-            correlative: 5,
-            clientId: $client1->id,
-            userId: $user->id,
-            paymentTypeId: $cash->id,
-            lines: [
-                ['product' => $papel, 'quantity' => 2],
-                ['product' => $snack, 'quantity' => 2],
-            ],
-            status: 'paid'
-        );
-
-        // Ninguna venta se queda sin tipo de pago.
-        Sale::query()->whereNull('payment_type_id')->update(['payment_type_id' => $cash->id]);
-    }
-
-    private function seedSaleWithRentalAndProducts(
-        string $code,
-        int $correlative,
-        int $clientId,
-        int $userId,
-        int $paymentTypeId,
-        int $roomId,
-        Carbon $startAt,
-        Carbon $endAt,
-        float $rate,
-        array $productLines,
-        string $status
-    ): void {
-        $sale = Sale::updateOrCreate(
-            ['code' => $code],
-            [
-                'document_type' => 'boleta',
-                'series' => 'B001',
-                'correlative' => $correlative,
-                'client_id' => $clientId,
-                'user_id' => $userId,
-                'payment_type_id' => $paymentTypeId,
-                'status' => $status,
+            $sale = Sale::query()->create([
+                'code' => sprintf('VTA-%04d', $i),
+                'document_type' => $documentType,
+                'series' => $series,
+                'correlative' => $i,
+                'client_id' => $client->id,
+                'user_id' => $user->id,
+                'payment_type_id' => $paymentType->id,
+                'status' => 'paid',
                 'total' => 0,
                 'subtotal' => 0,
                 'igv' => 0,
-            ]
-        );
-
-        SaleItem::where('sale_id', $sale->id)->delete();
-        RoomRental::where('sale_id', $sale->id)->delete();
-
-        $hours = max(1, (int) ceil($startAt->diffInMinutes($endAt) / 60));
-        $days = max(1, (int) ceil($hours / 24));
-        $rentalSubtotal = round($hours * $rate, 2);
-
-        RoomRental::create([
-            'sale_id' => $sale->id,
-            'room_id' => $roomId,
-            'start_at' => $startAt,
-            'end_at' => $endAt,
-            'hours' => $hours,
-            'days' => $days,
-            'rate' => $rate,
-            'subtotal' => $rentalSubtotal,
-        ]);
-
-        $total = $rentalSubtotal;
-
-        foreach ($productLines as $line) {
-            $product = $line['product'];
-            $qty = (int) $line['quantity'];
-            $subtotal = round($qty * (float) $product->price, 2);
-
-            SaleItem::create([
-                'sale_id' => $sale->id,
-                'product_id' => $product->id,
-                'quantity' => $qty,
-                'unit_price' => $product->price,
-                'subtotal' => $subtotal,
+                'created_at' => $createdAt,
+                'updated_at' => $createdAt,
             ]);
 
-            $total += $subtotal;
-        }
+            $total = 0;
 
-        [$base, $igv] = $this->splitTax($total);
-        $sale->update([
-            'total' => $total,
-            'subtotal' => $base,
-            'igv' => $igv,
-        ]);
-    }
+            if ($withRoom) {
+                $room = $rooms->random();
+                $useDaily = fake()->boolean(35);
 
-    private function seedProductOnlySale(string $code, int $correlative, int $clientId, int $userId, int $paymentTypeId, array $lines, string $status): void
-    {
-        $sale = Sale::updateOrCreate(
-            ['code' => $code],
-            [
-                'document_type' => 'boleta',
-                'series' => 'B001',
-                'correlative' => $correlative,
-                'client_id' => $clientId,
-                'user_id' => $userId,
-                'payment_type_id' => $paymentTypeId,
-                'status' => $status,
-                'total' => 0,
-                'subtotal' => 0,
-                'igv' => 0,
-            ]
-        );
+                if ($useDaily) {
+                    $days = random_int(1, 3);
+                    $rate = max(40, (float) $room->daily_rate + random_int(-10, 20));
+                    $startAt = (clone $createdAt);
+                    $endAt = (clone $startAt)->addDays($days);
+                    $hours = max(1, $startAt->diffInHours($endAt));
+                    $rentalSubtotal = round($days * $rate, 2);
+                } else {
+                    $hours = random_int(2, 14);
+                    $rate = max(15, (float) $room->hourly_rate + random_int(-2, 5));
+                    $startAt = (clone $createdAt);
+                    $endAt = (clone $startAt)->addHours($hours);
+                    $days = max(1, (int) ceil($hours / 24));
+                    $rentalSubtotal = round($hours * $rate, 2);
+                }
 
-        SaleItem::where('sale_id', $sale->id)->delete();
-        RoomRental::where('sale_id', $sale->id)->delete();
+                RoomRental::query()->create([
+                    'sale_id' => $sale->id,
+                    'room_id' => $room->id,
+                    'start_at' => $startAt,
+                    'end_at' => $endAt,
+                    'hours' => $hours,
+                    'days' => $days,
+                    'rate' => $rate,
+                    'subtotal' => $rentalSubtotal,
+                    'created_at' => $createdAt,
+                    'updated_at' => $createdAt,
+                ]);
 
-        $total = 0;
+                $guestName = $client->id === $consumerFinal->id
+                    ? $this->buildGuestName($guestFirstNames, $guestMiddleNames, $guestLastNames)
+                    : $client->full_name;
 
-        foreach ($lines as $line) {
-            $product = $line['product'];
-            $qty = (int) $line['quantity'];
-            $subtotal = round($qty * (float) $product->price, 2);
+                $guestDocument = $client->id === $consumerFinal->id
+                    ? (string) random_int(40000000, 79999999)
+                    : $client->dni;
 
-            SaleItem::create([
-                'sale_id' => $sale->id,
-                'product_id' => $product->id,
-                'quantity' => $qty,
-                'unit_price' => $product->price,
-                'subtotal' => $subtotal,
+                GuestRegister::query()->create([
+                    'code' => sprintf('HSP-%05d', $i),
+                    'sale_id' => $sale->id,
+                    'room_id' => $room->id,
+                    'created_by' => $user->id,
+                    'full_name' => $guestName,
+                    'document_type' => 'DNI',
+                    'document_number' => $guestDocument,
+                    'nationality' => 'PERUANA',
+                    'check_in_at' => $startAt,
+                    'check_out_at' => $endAt,
+                    'status' => 'salio',
+                    'notes' => 'Registro demo generado automaticamente',
+                    'created_at' => $createdAt,
+                    'updated_at' => $createdAt,
+                ]);
+
+                $total += $rentalSubtotal;
+            }
+
+            $lineCount = $withRoom ? random_int(0, 3) : random_int(1, 4);
+            $pickedProducts = $products->shuffle()->take($lineCount);
+
+            foreach ($pickedProducts as $product) {
+                $qty = random_int(1, 4);
+                $unitPrice = round(max(0.5, (float) $product->price + (random_int(-20, 20) / 10)), 2);
+                $lineSubtotal = round($qty * $unitPrice, 2);
+
+                SaleItem::query()->create([
+                    'sale_id' => $sale->id,
+                    'product_id' => $product->id,
+                    'quantity' => $qty,
+                    'unit_price' => $unitPrice,
+                    'subtotal' => $lineSubtotal,
+                    'created_at' => $createdAt,
+                    'updated_at' => $createdAt,
+                ]);
+
+                $total += $lineSubtotal;
+            }
+
+            [$base, $igv] = $this->splitTax($total);
+            $sale->update([
+                'total' => $total,
+                'subtotal' => $base,
+                'igv' => $igv,
             ]);
-
-            $total += $subtotal;
         }
-
-        [$base, $igv] = $this->splitTax($total);
-        $sale->update([
-            'total' => $total,
-            'subtotal' => $base,
-            'igv' => $igv,
-        ]);
     }
 
     private function splitTax(float $total): array
@@ -260,5 +181,19 @@ class HotelSalesSeeder extends Seeder
         $igv = round($total - $base, 2);
 
         return [$base, $igv];
+    }
+
+    private function buildGuestName(array $firstNames, array $middleNames, array $lastNames): string
+    {
+        $first = $firstNames[array_rand($firstNames)];
+        $middle = $middleNames[array_rand($middleNames)];
+        $last1 = $lastNames[array_rand($lastNames)];
+        $last2 = $lastNames[array_rand($lastNames)];
+
+        if ($last1 === $last2) {
+            $last2 = $lastNames[(array_search($last1, $lastNames, true) + 3) % count($lastNames)];
+        }
+
+        return trim($first . ' ' . $middle . ' ' . $last1 . ' ' . $last2);
     }
 }

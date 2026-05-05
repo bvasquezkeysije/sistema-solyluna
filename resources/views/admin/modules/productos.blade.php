@@ -52,10 +52,18 @@
                 <div class="flex flex-col gap-3 lg:flex-row lg:items-center">
                     <input type="text" name="q" value="{{ request('q') }}" class="w-full lg:flex-1 rounded-xl border-gray-300 focus:border-blue-500 focus:ring-blue-500" placeholder="Buscar producto por nombre, código o categoría">
 
-                    <button type="button" @click="showFilters = !showFilters" class="px-5 py-2.5 rounded-xl border border-slate-300 text-slate-700 text-sm font-semibold hover:bg-slate-50">Filtros</button>
-                    <button type="button" @click="showCreateProductModal = true" class="px-5 py-2.5 rounded-xl border border-emerald-200 bg-emerald-50 text-emerald-800 text-sm font-semibold hover:bg-emerald-100">Añadir producto</button>
-                    <button type="button" @click="showCategoriasModal = true" class="px-5 py-2.5 rounded-xl border border-blue-200 bg-blue-50 text-blue-800 text-sm font-semibold hover:bg-blue-100">Categorías</button>
-                    <button type="submit" class="px-5 py-2.5 rounded-xl bg-blue-900 text-white text-sm font-semibold hover:bg-blue-800">Buscar</button>
+                    <button type="button" @click="showFilters = !showFilters" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-slate-300 text-slate-700 text-sm font-semibold hover:bg-slate-50" aria-label="Filtros" title="Filtros">
+                        <img src="{{ asset('images/flitro.svg') }}" alt="Filtros" class="w-4 h-4">
+                    </button>
+                    <button type="button" @click="showCreateProductModal = true" class="inline-flex items-center justify-center px-5 py-2.5 rounded-xl border border-emerald-200 bg-emerald-50 text-emerald-800 text-sm font-semibold hover:bg-emerald-100" aria-label="Añadir producto" title="Añadir producto">
+                        <img src="{{ asset('images/agregar-productos.svg') }}" alt="Añadir producto" class="w-4 h-4">
+                    </button>
+                    <button type="button" @click="showCategoriasModal = true" class="inline-flex items-center justify-center px-5 py-2.5 rounded-xl border border-blue-200 bg-blue-50 text-blue-800 text-sm font-semibold hover:bg-blue-100" aria-label="Categorías" title="Categorías">
+                        <img src="{{ asset('images/categoria.svg') }}" alt="Categorías" class="w-4 h-4">
+                    </button>
+                    <button type="submit" class="inline-flex items-center justify-center px-5 py-2.5 rounded-xl bg-blue-900 text-white text-sm font-semibold hover:bg-blue-800" aria-label="Buscar" title="Buscar">
+                        <img src="{{ asset('images/buscar.svg') }}" alt="Buscar" class="w-4 h-4 brightness-0 invert">
+                    </button>
                 </div>
 
                 <div x-show="showFilters" x-transition class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3 rounded-xl border border-slate-200 bg-slate-50/60 p-4" style="display: none;">
@@ -93,25 +101,31 @@
                                         <button
                                             type="button"
                                             x-on:click="openProductDetail({{ \Illuminate\Support\Js::from(['id' => $product->id, 'code' => $product->code, 'name' => $product->name, 'category' => $product->category, 'price' => (float) $product->price, 'stock' => (int) $product->stock, 'active' => (bool) $product->active, 'created_at' => optional($product->created_at)->format('d/m/Y H:i')]) }})"
-                                            class="px-3 py-1.5 rounded-lg bg-slate-600 text-white text-xs font-semibold hover:bg-slate-700"
+                                            class="inline-flex items-center justify-center px-3 py-1.5 rounded-lg bg-slate-600 text-white text-xs font-semibold hover:bg-slate-700"
+                                            aria-label="Ver detalle"
+                                            title="Ver detalle"
                                         >
-                                            Ver detalle
+                                            <img src="{{ asset('images/ver-detalle.svg') }}" alt="Ver detalle" class="w-4 h-4 brightness-0 invert">
                                         </button>
                                         <button
                                             type="button"
                                             x-on:click="openEditProduct({{ \Illuminate\Support\Js::from(['id' => $product->id, 'name' => $product->name, 'category' => $product->category, 'price' => (string) $product->price, 'stock' => (int) $product->stock, 'active' => (bool) $product->active]) }})"
-                                            class="px-3 py-1.5 rounded-lg bg-amber-500 text-white text-xs font-semibold hover:bg-amber-600"
+                                            class="inline-flex items-center justify-center px-3 py-1.5 rounded-lg bg-amber-500 text-white text-xs font-semibold hover:bg-amber-600"
+                                            aria-label="Editar"
+                                            title="Editar"
                                         >
-                                            Editar
+                                            <img src="{{ asset('images/editar.svg') }}" alt="Editar" class="w-4 h-4 brightness-0 invert">
                                         </button>
                                         <form action="{{ route('admin.productos.toggle-status', $product) }}" method="POST">
                                             @csrf
                                             @method('PATCH')
                                             <button
                                                 type="submit"
-                                                class="px-3 py-1.5 rounded-lg text-white text-xs font-semibold {{ $product->active ? 'bg-rose-600 hover:bg-rose-700' : 'bg-emerald-600 hover:bg-emerald-700' }}"
+                                                class="inline-flex items-center justify-center px-3 py-1.5 rounded-lg text-white text-xs font-semibold {{ $product->active ? 'bg-rose-600 hover:bg-rose-700' : 'bg-emerald-600 hover:bg-emerald-700' }}"
+                                                aria-label="{{ $product->active ? 'Desactivar' : 'Activar' }}"
+                                                title="{{ $product->active ? 'Desactivar' : 'Activar' }}"
                                             >
-                                                {{ $product->active ? 'Desactivar' : 'Activar' }}
+                                                <img src="{{ asset('images/eliminar-descativar.svg') }}" alt="{{ $product->active ? 'Desactivar' : 'Activar' }}" class="w-4 h-4 brightness-0 invert">
                                             </button>
                                         </form>
                                     </div>
@@ -299,9 +313,11 @@
                                             <button
                                                 type="button"
                                                 x-on:click="openEditCategory({{ \Illuminate\Support\Js::from(['id' => $categoryRow->id, 'name' => $categoryRow->name]) }})"
-                                                class="px-3 py-1.5 rounded-lg bg-amber-500 text-white text-xs font-semibold hover:bg-amber-600"
+                                                class="inline-flex items-center justify-center px-3 py-1.5 rounded-lg bg-amber-500 text-white text-xs font-semibold hover:bg-amber-600"
+                                                aria-label="Editar"
+                                                title="Editar"
                                             >
-                                                Editar
+                                                <img src="{{ asset('images/editar.svg') }}" alt="Editar" class="w-4 h-4 brightness-0 invert">
                                             </button>
                                         </td>
                                     </tr>

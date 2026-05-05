@@ -266,10 +266,18 @@
                 <div class="flex flex-col gap-3 lg:flex-row lg:items-center">
                     <input type="text" name="q" value="{{ request('q') }}" class="w-full lg:flex-1 rounded-xl border-gray-300 focus:border-blue-500 focus:ring-blue-500" placeholder="Buscar venta por código, cliente o usuario">
 
-                    <button type="button" @click="showFilters = !showFilters" class="px-5 py-2.5 rounded-xl border border-slate-300 text-slate-700 text-sm font-semibold hover:bg-slate-50">Filtros</button>
-                    <button type="button" @click="showSaleModal = true" class="px-5 py-2.5 rounded-xl border border-blue-200 bg-blue-50 text-blue-800 text-sm font-semibold hover:bg-blue-100">Añadir venta</button>
-                    <button type="button" @click="showPaymentTypesModal = true" class="px-5 py-2.5 rounded-xl border border-emerald-200 bg-emerald-50 text-emerald-800 text-sm font-semibold hover:bg-emerald-100">Tipos de pago</button>
-                    <button type="submit" class="px-5 py-2.5 rounded-xl bg-blue-900 text-white text-sm font-semibold hover:bg-blue-800">Buscar</button>
+                    <button type="button" @click="showFilters = !showFilters" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-slate-300 text-slate-700 text-sm font-semibold hover:bg-slate-50" aria-label="Filtros" title="Filtros">
+                        <img src="{{ asset('images/flitro.svg') }}" alt="Filtros" class="w-4 h-4">
+                    </button>
+                    <button type="button" @click="showSaleModal = true" class="inline-flex items-center justify-center px-5 py-2.5 rounded-xl border border-blue-200 bg-blue-50 text-blue-800 text-sm font-semibold hover:bg-blue-100" aria-label="Añadir venta" title="Añadir venta">
+                        <img src="{{ asset('images/anadir-venta.svg') }}" alt="Añadir venta" class="w-4 h-4">
+                    </button>
+                    <button type="button" @click="showPaymentTypesModal = true" class="inline-flex items-center justify-center px-5 py-2.5 rounded-xl border border-emerald-200 bg-emerald-50 text-emerald-800 text-sm font-semibold hover:bg-emerald-100" aria-label="Tipos de pago" title="Tipos de pago">
+                        <img src="{{ asset('images/tipo-pago.svg') }}" alt="Tipos de pago" class="w-4 h-4">
+                    </button>
+                    <button type="submit" class="inline-flex items-center justify-center px-5 py-2.5 rounded-xl bg-blue-900 text-white text-sm font-semibold hover:bg-blue-800" aria-label="Buscar" title="Buscar">
+                        <img src="{{ asset('images/buscar.svg') }}" alt="Buscar" class="w-4 h-4 brightness-0 invert">
+                    </button>
                 </div>
 
                 <div x-show="showFilters" x-transition class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3 rounded-xl border border-slate-200 bg-slate-50/60 p-4" style="display: none;">
@@ -303,16 +311,20 @@
                                     <button
                                         type="button"
                                         @click="openSaleDetailById({{ $sale->id }})"
-                                        class="px-3 py-1.5 rounded-lg bg-slate-700 text-white text-xs font-semibold hover:bg-slate-800"
+                                        class="inline-flex items-center justify-center px-3 py-1.5 rounded-lg bg-slate-700 text-white text-xs font-semibold hover:bg-slate-800"
+                                        aria-label="Ver detalle"
+                                        title="Ver detalle"
                                     >
-                                        Ver detalle
+                                        <img src="{{ asset('images/ver-detalle.svg') }}" alt="Ver detalle" class="w-4 h-4 brightness-0 invert">
                                     </button>
                                     <a
                                         href="{{ route('admin.ventas.print', $sale) }}"
                                         target="_blank"
-                                        class="px-3 py-1.5 rounded-lg bg-blue-700 text-white text-xs font-semibold hover:bg-blue-800"
+                                        class="inline-flex items-center justify-center px-3 py-1.5 rounded-lg bg-blue-700 text-white text-xs font-semibold hover:bg-blue-800"
+                                        aria-label="Imprimir boleta"
+                                        title="Imprimir boleta"
                                     >
-                                        Imprimir boleta
+                                        <img src="{{ asset('images/imprimir.svg') }}" alt="Imprimir boleta" class="w-4 h-4 brightness-0 invert">
                                     </a>
                                 </div>
                             </td>
@@ -459,8 +471,8 @@
                             <label class="block text-sm font-medium text-slate-700">DNI del huésped</label>
                             <div class="flex gap-2">
                                 <input type="text" x-model="guestLookupDocument" class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500" placeholder="Ej: 12345678">
-                                <button type="button" @click="lookupGuestByDni" :disabled="guestLookupLoading" class="px-4 py-2 rounded-lg bg-blue-900 text-white text-sm font-semibold hover:bg-blue-800 disabled:opacity-60">
-                                    <span x-show="!guestLookupLoading">Buscar DNI</span>
+                                <button type="button" @click="lookupGuestByDni" :disabled="guestLookupLoading" class="inline-flex items-center justify-center px-4 py-2 rounded-lg bg-blue-900 text-white text-sm font-semibold hover:bg-blue-800 disabled:opacity-60" aria-label="Buscar DNI" title="Buscar DNI">
+                                    <span x-show="!guestLookupLoading"><img src="{{ asset('images/buscar.svg') }}" alt="Buscar DNI" class="w-4 h-4 brightness-0 invert"></span>
                                     <span x-show="guestLookupLoading" style="display:none;">Buscando...</span>
                                 </button>
                             </div>
@@ -577,15 +589,17 @@
                                                 <button
                                                     type="button"
                                                     @click='openEditPaymentType({ id: {{ $paymentType->id }}, name: @js($paymentType->name) })'
-                                                    class="px-3 py-1.5 rounded-lg bg-amber-500 text-white text-xs font-semibold hover:bg-amber-600"
+                                                    class="inline-flex items-center justify-center px-3 py-1.5 rounded-lg bg-amber-500 text-white text-xs font-semibold hover:bg-amber-600"
+                                                    aria-label="Editar"
+                                                    title="Editar"
                                                 >
-                                                    Editar
+                                                    <img src="{{ asset('images/editar.svg') }}" alt="Editar" class="w-4 h-4 brightness-0 invert">
                                                 </button>
                                                 <form method="POST" action="{{ route('admin.ventas.payment-types.toggle-status', $paymentType) }}">
                                                     @csrf
                                                     @method('PATCH')
-                                                    <button type="submit" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-white {{ $paymentType->is_active ? 'bg-rose-600 hover:bg-rose-700' : 'bg-emerald-600 hover:bg-emerald-700' }}">
-                                                        {{ $paymentType->is_active ? 'Desactivar' : 'Activar' }}
+                                                    <button type="submit" class="inline-flex items-center justify-center px-3 py-1.5 rounded-lg text-xs font-semibold text-white {{ $paymentType->is_active ? 'bg-rose-600 hover:bg-rose-700' : 'bg-emerald-600 hover:bg-emerald-700' }}" aria-label="{{ $paymentType->is_active ? 'Desactivar' : 'Activar' }}" title="{{ $paymentType->is_active ? 'Desactivar' : 'Activar' }}">
+                                                        <img src="{{ asset('images/eliminar-descativar.svg') }}" alt="{{ $paymentType->is_active ? 'Desactivar' : 'Activar' }}" class="w-4 h-4 brightness-0 invert">
                                                     </button>
                                                 </form>
                                             </div>
@@ -641,8 +655,8 @@
                         <label class="block text-sm font-semibold text-slate-700">DNI / RUC</label>
                         <div class="flex gap-2">
                             <input type="text" x-model="quickDocument" class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm" placeholder="Ej: 12345678 o 20123456789">
-                            <button type="button" @click="lookupDocument" :disabled="quickLoading" class="px-4 py-2 rounded-lg bg-blue-900 text-white text-sm font-semibold hover:bg-blue-800 disabled:opacity-60">
-                                <span x-show="!quickLoading">Buscar</span>
+                            <button type="button" @click="lookupDocument" :disabled="quickLoading" class="inline-flex items-center justify-center px-4 py-2 rounded-lg bg-blue-900 text-white text-sm font-semibold hover:bg-blue-800 disabled:opacity-60" aria-label="Buscar" title="Buscar">
+                                <span x-show="!quickLoading"><img src="{{ asset('images/buscar.svg') }}" alt="Buscar" class="w-4 h-4 brightness-0 invert"></span>
                                 <span x-show="quickLoading" style="display:none;">Buscando...</span>
                             </button>
                         </div>

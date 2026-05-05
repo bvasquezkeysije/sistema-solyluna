@@ -88,9 +88,10 @@
     </div>
 
     <div class="no-print" style="margin-top:16px; text-align:right;">
-        <button onclick="window.print()" style="padding:10px 14px;border:0;background:#1e3a8a;color:#fff;border-radius:8px;cursor:pointer;">Imprimir</button>
+        <button onclick="window.print()" style="display:inline-flex;align-items:center;justify-content:center;padding:10px 14px;border:0;background:#1e3a8a;color:#fff;border-radius:8px;cursor:pointer;" aria-label="Imprimir comprobante" title="Imprimir comprobante">
+            <img src="{{ asset('images/imprimir.svg') }}" alt="Imprimir comprobante" style="width:16px;height:16px;filter:brightness(0) invert(1);">
+        </button>
     </div>
 </div>
 </body>
 </html>
-
